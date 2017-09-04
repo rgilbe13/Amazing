@@ -54,6 +54,7 @@ public class TestAmazing extends TestCase {
         Amazing.horizontal = 15;
         Amazing.vertical = 20;
         Amazing.isCellComplete = new boolean[Amazing.horizontal + 1][Amazing.vertical + 1];
+        Amazing.maze = new int [Amazing.horizontal + 1][Amazing.vertical + 1];
         Amazing.doit();
 
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
@@ -78,6 +79,7 @@ public class TestAmazing extends TestCase {
         Amazing.horizontal = 4;
         Amazing.vertical = 5;
         Amazing.isCellComplete = new boolean[Amazing.horizontal + 1][Amazing.vertical + 1];
+        Amazing.maze = new int [Amazing.horizontal + 1][Amazing.vertical + 1];
         Amazing.doit();
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
 

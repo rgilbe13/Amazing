@@ -15,11 +15,13 @@ public class Amazing {
     public static int horizontal;
     public static int vertical;
     public static boolean [][] isCellComplete;
+    public static int [][] maze;
 
     public static void main(String[] args) {
     	horizontal = Integer.parseInt(args[0]);
     	vertical = Integer.parseInt(args[1]);
     	isCellComplete = new boolean[horizontal + 1][vertical + 1];
+    	maze = new int [horizontal + 1][vertical + 1];
         doit();
         System.out.println(result);
         //System.out.println(random.nextFloat());
@@ -52,9 +54,6 @@ public class Amazing {
 
         if (horizontal == 1 || vertical == 1) return;
 
-        
-        int[][] vArray = new int[horizontal + 1][vertical + 1];
-
         int q = 0;
         int z = 0;
         int x = rnd(horizontal);
@@ -67,76 +66,74 @@ public class Amazing {
         currentCellCount++;
 
         // 200
-        int r = x;
-        int s = 1;
+        int row = x;
+        int column = 1;
         GOTO(270);
 
-        while (target != -1) {
+       loop: while (true) {
             switch (target) {
                 case 210:
-                    if (r != horizontal)
+                    if (canMoveDown(row))
                         GOTO(250);
                     else
                         GOTO(220);
                     continue;
                 case 220:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(240);
                     else
                         GOTO(230);
                     continue;
                 case 230:
-                    r = 1;
-                    s = 1;
+                    row = 1;
+                    column = 1;
                     GOTO(260);
                     continue;
                 case 240:
-                    r = 1;
-                    s++;
+                    row = 1;
+                    column++;
                     GOTO(260);
                     continue;
                 case 250:
-                    r++;
+                    row++;
                     GOTO(260);
                     continue;
                 case 260:
-                    if (!isCellComplete(r, s))
+                    if (!isCellComplete(row, column))
                         GOTO(210);
                     else
                         GOTO(270);
                     continue;
                 case 270:
-                    if (r - 1 == 0)
-                        GOTO(600);
-                    else
-                        GOTO(280);
-                    continue;
-                case 280:
-                    if (isCellComplete(r-1, s))
-                        GOTO(600);
-                    else
-                        GOTO(290);
+                    if (row - 1 == 0) // can go up
+                        GOTO(600); // no
+                    else {
+                    	if (isCellComplete(row-1, column)) //yes
+                            GOTO(600);
+                        else
+                            GOTO(290);
+                    }
                     continue;
                 case 290:
-                    if (s - 1 == 0)
+                    if (column - 1 == 0)
                         GOTO(430);
                     else
                         GOTO(300);
                     continue;
                 case 300:
-                    if (isCellComplete(r, s-1))
+                    if (isCellComplete(row, column-1))
                         GOTO(430);
                     else
                         GOTO(310);
                     continue;
                 case 310:
-                    if (r == horizontal)
+                    if (row == horizontal)
                         GOTO(350);
                     else
                         GOTO(320);
                     continue;
                 case 320:
-                    if (isCellComplete(r+1, s))
+                    if (isCellComplete(row+1, column))
                         GOTO(350);
                     else
                         GOTO(330);
@@ -153,7 +150,7 @@ public class Amazing {
                         GOTO(350);
                     continue;
                 case 350:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(380);
                     else
                         GOTO(360);
@@ -169,7 +166,7 @@ public class Amazing {
                     GOTO(390);
                     continue;
                 case 380:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(410);
                     else
                         GOTO(390);
@@ -195,19 +192,19 @@ public class Amazing {
                         GOTO(430);
                     continue;
                 case 430:
-                    if (r == horizontal)
+                    if (row == horizontal)
                         GOTO(530);
                     else
                         GOTO(440);
                     continue;
                 case 440:
-                    if (isCellComplete(r+1, s))
+                    if (isCellComplete(row+1, column))
                         GOTO(530);
                     else
                         GOTO(450);
                     continue;
                 case 450:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(480);
                     else
                         GOTO(460);
@@ -223,7 +220,7 @@ public class Amazing {
                     GOTO(490);
                     continue;
                 case 480:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(510);
                     else
                         GOTO(490);
@@ -252,7 +249,7 @@ public class Amazing {
                         GOTO(530);
                     continue;
                 case 530:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(560);
                     else
                         GOTO(540);
@@ -268,7 +265,7 @@ public class Amazing {
                     GOTO(570);
                     continue;
                 case 560:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(940);
                     else
                         GOTO(570);
@@ -283,31 +280,31 @@ public class Amazing {
                         GOTO(940);
                     continue;
                 case 600:
-                    if (s - 1 == 0)
+                    if (column - 1 == 0)
                         GOTO(790);
                     else
                         GOTO(610);
                     continue;
                 case 610:
-                    if (isCellComplete(r, s-1))
+                    if (isCellComplete(row, column-1))
                         GOTO(790);
                     else
                         GOTO(620);
                     continue;
                 case 620:
-                    if (r == horizontal)
+                    if (row == horizontal)
                         GOTO(720);
                     else
                         GOTO(630);
                     continue;
                 case 630:
-                    if (isCellComplete(r+1, s))
+                    if (isCellComplete(row+1, column))
                         GOTO(720);
                     else
                         GOTO(640);
                     continue;
                 case 640:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(670);
                     else
                         GOTO(650);
@@ -323,7 +320,7 @@ public class Amazing {
                     GOTO(680);
                     continue;
                 case 670:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(700);
                     else
                         GOTO(680);
@@ -349,7 +346,7 @@ public class Amazing {
                         GOTO(720);
                     continue;
                 case 720:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(750);
                     else
                         GOTO(730);
@@ -365,7 +362,7 @@ public class Amazing {
                     GOTO(760);
                     continue;
                 case 750:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(980);
                     else
                         GOTO(760);
@@ -380,19 +377,19 @@ public class Amazing {
                         GOTO(980);
                     continue;
                 case 790:
-                    if (r == horizontal)
+                    if (row == horizontal)
                         GOTO(880);
                     else
                         GOTO(800);
                     continue;
                 case 800:
-                    if (isCellComplete(r+1, s))
+                    if (isCellComplete(row+1, column))
                         GOTO(880);
                     else
                         GOTO(810);
                     continue;
                 case 810:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(840);
                     else
                         GOTO(820);
@@ -408,7 +405,7 @@ public class Amazing {
                     GOTO(990);
                     continue;
                 case 840:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(1020);
                     else
                         GOTO(850);
@@ -426,7 +423,7 @@ public class Amazing {
                         GOTO(1020);
                     continue;
                 case 880:
-                    if (s != vertical)
+                    if (column != vertical)
                         GOTO(910);
                     else
                         GOTO(890);
@@ -442,18 +439,18 @@ public class Amazing {
                     GOTO(1090);
                     continue;
                 case 910:
-                    if (isCellComplete(r, s+1))
+                    if (isCellComplete(row, column+1))
                         GOTO(210);
                     else
                         GOTO(1090);
                     continue;
                 case 940:
-                	markCellComplete(r-1, s);
+                	markCellComplete(row-1, column);
                     currentCellCount++;
-                    vArray[r - 1][s] = 2;
-                    r--;
-                    if (currentCellCount == horizontal * vertical + 1)
-                        GOTO(1200);
+                    maze[row - 1][column] = 2;
+                    row--;
+                    if (isMazeComplete(currentCellCount))
+                        break loop;
                     else
                         GOTO(970);
                     continue;
@@ -462,15 +459,15 @@ public class Amazing {
                     GOTO(270);
                     continue;
                 case 980:
-                	markCellComplete(r, s-1);
+                	markCellComplete(row, column-1);
                     GOTO(990);
                     continue;
                 case 990:
                     currentCellCount++;
-                    vArray[r][s - 1] = 1;
-                    s--;
-                    if (currentCellCount == horizontal * vertical + 1)
-                        GOTO(1200);
+                    maze[row][column - 1] = 1;
+                    column--;
+                    if (isMazeComplete(currentCellCount))
+                       ;
                     else
                         GOTO(1010);
                     continue;
@@ -479,25 +476,25 @@ public class Amazing {
                     GOTO(270);
                     continue;
                 case 1020:
-                	markCellComplete(r+1, s);
+                	markCellComplete(row+1, column);
                     currentCellCount++;
-                    if (vArray[r][s] == 0)
+                    if (maze[row][column] == 0)
                         GOTO(1050);
                     else
                         GOTO(1040);
                     continue;
                 case 1040:
-                    vArray[r][s] = 3;
+                    maze[row][column] = 3;
                     GOTO(1060);
                     continue;
                 case 1050:
-                    vArray[r][s] = 2;
+                    maze[row][column] = 2;
                     GOTO(1060);
                     continue;
                 case 1060:
-                    r++;
-                    if (currentCellCount == horizontal * vertical + 1)
-                        GOTO(1200);
+                    row++;
+                    if (isMazeComplete(currentCellCount))
+                        break loop;
                     else
                         GOTO(600);
                     continue;
@@ -508,60 +505,66 @@ public class Amazing {
                         GOTO(1100);
                     continue;
                 case 1100:
-                	markCellComplete(r, s+1);
+                	markCellComplete(row, column+1);
                     currentCellCount++;
-                    if (vArray[r][s] == 0)
+                    if (maze[row][column] == 0)
                         GOTO(1120);
                     else
                         GOTO(1110);
                     continue;
                 case 1110:
-                    vArray[r][s] = 3;
+                    maze[row][column] = 3;
                     GOTO(1130);
                     continue;
                 case 1120:
-                    vArray[r][s] = 1;
+                    maze[row][column] = 1;
                     GOTO(1130);
                     continue;
                 case 1130:
-                    s++;
-                    if (currentCellCount == vertical * horizontal + 1)
-                        GOTO(1200);
+                    column++;
+                    if (isMazeComplete(currentCellCount))
+                        break loop;
                     else
                         GOTO(270);
                     continue;
                 case 1150:
                     z = 1;
-                    if (vArray[r][s] == 0)
+                    if (maze[row][column] == 0)
                         GOTO(1180);
                     else
                         GOTO(1170);
                     continue;
                 case 1170:
-                    vArray[r][s] = 3;
+                    maze[row][column] = 3;
                     q = 0;
                     GOTO(210);
                     continue;
                 case 1180:
-                    vArray[r][s] = 1;
+                    maze[row][column] = 1;
                     q = 0;
-                    r = 1;
-                    s = 1;
+                    row = 1;
+                    column = 1;
                     GOTO(260);
                     continue;
-                case 1200:
-                    target = -1;
-                    continue;
             }
-
         }
+        mazeToString();
+    }
 
-        // 1200:
-        for (int j = 1; j <= vertical; j++) {
+	private static boolean canMoveDown(int row) {
+		return row != horizontal;
+	}
+
+	private static boolean isMazeComplete(int currentCellCount) {
+		return currentCellCount == vertical * horizontal + 1;
+	}
+
+	private static void mazeToString() {
+		for (int j = 1; j <= vertical; j++) {
             print("I");        // 1210
 
             for (int i = 1; i <= horizontal; i++) {
-                if (vArray[i][j] >= 2)
+                if (maze[i][j] >= 2)
                     print("   ");  // 1240
                 else
                     print("  I");  // 1260
@@ -571,9 +574,9 @@ public class Amazing {
             println();
 
             for (int i = 1; i <= horizontal; i++) {
-                if (vArray[i][j] == 0)
+                if (maze[i][j] == 0)
                     print(":--");   // 1300, 1340
-                else if (vArray[i][j] == 2)
+                else if (maze[i][j] == 2)
                     print(":--");  // 1310, 1340
                 else
                     print(":  "); // 1320
@@ -582,7 +585,7 @@ public class Amazing {
             print(":");    // 1360
             println();
         }
-    }
+	}
     
     private static void createEnterance(int x) {
     	// 130:170
