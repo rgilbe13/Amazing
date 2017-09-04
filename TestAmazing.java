@@ -51,7 +51,10 @@ public class TestAmazing extends TestCase {
                 ":--:--:--:--:--:--:--:--:  :--:--:--:--:--:--:\n";
 
         Amazing.random = new Random(0);
-        Amazing.doit(15, 20);
+        Amazing.horizontal = 15;
+        Amazing.vertical = 20;
+        Amazing.isCellComplete = new boolean[Amazing.horizontal + 1][Amazing.vertical + 1];
+        Amazing.doit();
 
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
     }
@@ -72,7 +75,10 @@ public class TestAmazing extends TestCase {
                 ":--:--:  :--:\n";
 
         Amazing.random = new Random(100);
-        Amazing.doit(4, 5);
+        Amazing.horizontal = 4;
+        Amazing.vertical = 5;
+        Amazing.isCellComplete = new boolean[Amazing.horizontal + 1][Amazing.vertical + 1];
+        Amazing.doit();
         assertEquals("Should have the maze that was expected", expected, Amazing.result.toString());
 
     }

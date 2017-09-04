@@ -12,9 +12,15 @@ public class Amazing {
     static int target = 0;      // where GOTO goes
     public static Random random = new Random(100);
     static StringBuffer result = new StringBuffer();
+    public static int horizontal;
+    public static int vertical;
+    public static boolean [][] isCellComplete;
 
     public static void main(String[] args) {
-        doit(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+    	horizontal = Integer.parseInt(args[0]);
+    	vertical = Integer.parseInt(args[1]);
+    	isCellComplete = new boolean[horizontal + 1][vertical + 1];
+        doit();
         System.out.println(result);
         //System.out.println(random.nextFloat());
     }
@@ -39,37 +45,26 @@ public class Amazing {
         target = lineno;
     }
 
-    public static void doit(int horizontal, int vertical) {
+    public static void doit() {
         clear();
         print("Amazing - Copyright by Creative Computing, Morristown, NJ");
         println();
 
-        int h = horizontal;
-        int v = vertical;
-        if (h == 1 || v == 1) return;
+        if (horizontal == 1 || vertical == 1) return;
 
-        int[][] wArray = new int[h + 1][v + 1];
-        int[][] vArray = new int[h + 1][v + 1];
+        
+        int[][] vArray = new int[horizontal + 1][vertical + 1];
 
         int q = 0;
         int z = 0;
-        int x = rnd(h);
+        int x = rnd(horizontal);
 
-        // 130:170
-        for (int i = 1; i <= h; i++) {
-            if (i == x)
-                print(":  ");
-            else
-                print(":--");
-        }
-        // 180
-        print(":");
-        println();
+        createEnterance(x);
 
         // 190
-        int c = 1;
-        wArray[x][1] = c;
-        c++;
+        int currentCellCount = 1;
+        markCellComplete(x, 1);
+        currentCellCount++;
 
         // 200
         int r = x;
@@ -79,13 +74,13 @@ public class Amazing {
         while (target != -1) {
             switch (target) {
                 case 210:
-                    if (r != h)
+                    if (r != horizontal)
                         GOTO(250);
                     else
                         GOTO(220);
                     continue;
                 case 220:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(240);
                     else
                         GOTO(230);
@@ -105,7 +100,7 @@ public class Amazing {
                     GOTO(260);
                     continue;
                 case 260:
-                    if (wArray[r][s] == 0)
+                    if (!isCellComplete(r, s))
                         GOTO(210);
                     else
                         GOTO(270);
@@ -117,7 +112,7 @@ public class Amazing {
                         GOTO(280);
                     continue;
                 case 280:
-                    if (wArray[r - 1][s] != 0)
+                    if (isCellComplete(r-1, s))
                         GOTO(600);
                     else
                         GOTO(290);
@@ -129,28 +124,25 @@ public class Amazing {
                         GOTO(300);
                     continue;
                 case 300:
-                    if (wArray[r][s - 1] != 0)
+                    if (isCellComplete(r, s-1))
                         GOTO(430);
                     else
                         GOTO(310);
                     continue;
                 case 310:
-                    if (r == h)
+                    if (r == horizontal)
                         GOTO(350);
                     else
                         GOTO(320);
                     continue;
                 case 320:
-                    if (wArray[r + 1][s] != 0)
+                    if (isCellComplete(r+1, s))
                         GOTO(350);
                     else
                         GOTO(330);
                     continue;
                 case 330:
                     x = rnd(3);
-                    GOTO(340);
-                    continue;
-                case 340:
                     if (x == 1)
                         GOTO(940);
                     else if (x == 2)
@@ -161,7 +153,7 @@ public class Amazing {
                         GOTO(350);
                     continue;
                 case 350:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(380);
                     else
                         GOTO(360);
@@ -177,16 +169,13 @@ public class Amazing {
                     GOTO(390);
                     continue;
                 case 380:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(410);
                     else
                         GOTO(390);
                     continue;
                 case 390:
                     x = rnd(3);
-                    GOTO(400);
-                    continue;
-                case 400:
                     if (x == 1)
                         GOTO(940);
                     else if (x == 2)
@@ -198,9 +187,6 @@ public class Amazing {
                     continue;
                 case 410:
                     x = rnd(2);
-                    GOTO(420);
-                    continue;
-                case 420:
                     if (x == 1)
                         GOTO(940);
                     else if (x == 2)
@@ -209,19 +195,19 @@ public class Amazing {
                         GOTO(430);
                     continue;
                 case 430:
-                    if (r == h)
+                    if (r == horizontal)
                         GOTO(530);
                     else
                         GOTO(440);
                     continue;
                 case 440:
-                    if (wArray[r + 1][s] != 0)
+                    if (isCellComplete(r+1, s))
                         GOTO(530);
                     else
                         GOTO(450);
                     continue;
                 case 450:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(480);
                     else
                         GOTO(460);
@@ -237,7 +223,7 @@ public class Amazing {
                     GOTO(490);
                     continue;
                 case 480:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(510);
                     else
                         GOTO(490);
@@ -258,9 +244,6 @@ public class Amazing {
                     continue;
                 case 510:
                     x = rnd(2);
-                    GOTO(520);
-                    continue;
-                case 520:
                     if (x == 1)
                         GOTO(940);
                     else if (x == 2)
@@ -269,7 +252,7 @@ public class Amazing {
                         GOTO(530);
                     continue;
                 case 530:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(560);
                     else
                         GOTO(540);
@@ -285,16 +268,13 @@ public class Amazing {
                     GOTO(570);
                     continue;
                 case 560:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(940);
                     else
                         GOTO(570);
                     continue;
                 case 570:
                     x = rnd(2);
-                    GOTO(580);
-                    continue;
-                case 580:
                     if (x == 1)
                         GOTO(940);
                     else if (x == 2)
@@ -309,25 +289,25 @@ public class Amazing {
                         GOTO(610);
                     continue;
                 case 610:
-                    if (wArray[r][s - 1] != 0)
+                    if (isCellComplete(r, s-1))
                         GOTO(790);
                     else
                         GOTO(620);
                     continue;
                 case 620:
-                    if (r == h)
+                    if (r == horizontal)
                         GOTO(720);
                     else
                         GOTO(630);
                     continue;
                 case 630:
-                    if (wArray[r + 1][s] != 0)
+                    if (isCellComplete(r+1, s))
                         GOTO(720);
                     else
                         GOTO(640);
                     continue;
                 case 640:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(670);
                     else
                         GOTO(650);
@@ -343,16 +323,13 @@ public class Amazing {
                     GOTO(680);
                     continue;
                 case 670:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(700);
                     else
                         GOTO(680);
                     continue;
                 case 680:
                     x = rnd(3);
-                    GOTO(690);
-                    continue;
-                case 690:
                     if (x == 1)
                         GOTO(980);
                     else if (x == 2)
@@ -364,9 +341,6 @@ public class Amazing {
                     continue;
                 case 700:
                     x = rnd(2);
-                    GOTO(710);
-                    continue;
-                case 710:
                     if (x == 1)
                         GOTO(980);
                     else if (x == 2)
@@ -375,7 +349,7 @@ public class Amazing {
                         GOTO(720);
                     continue;
                 case 720:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(750);
                     else
                         GOTO(730);
@@ -391,16 +365,13 @@ public class Amazing {
                     GOTO(760);
                     continue;
                 case 750:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(980);
                     else
                         GOTO(760);
                     continue;
                 case 760:
                     x = rnd(2);
-                    GOTO(770);
-                    continue;
-                case 770:
                     if (x == 1)
                         GOTO(980);
                     else if (x == 2)
@@ -409,19 +380,19 @@ public class Amazing {
                         GOTO(980);
                     continue;
                 case 790:
-                    if (r == h)
+                    if (r == horizontal)
                         GOTO(880);
                     else
                         GOTO(800);
                     continue;
                 case 800:
-                    if (wArray[r + 1][s] != 0)
+                    if (isCellComplete(r+1, s))
                         GOTO(880);
                     else
                         GOTO(810);
                     continue;
                 case 810:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(840);
                     else
                         GOTO(820);
@@ -437,7 +408,7 @@ public class Amazing {
                     GOTO(990);
                     continue;
                 case 840:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(1020);
                     else
                         GOTO(850);
@@ -455,7 +426,7 @@ public class Amazing {
                         GOTO(1020);
                     continue;
                 case 880:
-                    if (s != v)
+                    if (s != vertical)
                         GOTO(910);
                     else
                         GOTO(890);
@@ -471,23 +442,17 @@ public class Amazing {
                     GOTO(1090);
                     continue;
                 case 910:
-                    if (wArray[r][s + 1] != 0)
+                    if (isCellComplete(r, s+1))
                         GOTO(210);
                     else
                         GOTO(1090);
                     continue;
                 case 940:
-                    wArray[r - 1][s] = c;
-                    GOTO(950);
-                    continue;
-                case 950:
-                    c++;
+                	markCellComplete(r-1, s);
+                    currentCellCount++;
                     vArray[r - 1][s] = 2;
                     r--;
-                    GOTO(960);
-                    continue;
-                case 960:
-                    if (c == h * v + 1)
+                    if (currentCellCount == horizontal * vertical + 1)
                         GOTO(1200);
                     else
                         GOTO(970);
@@ -497,17 +462,14 @@ public class Amazing {
                     GOTO(270);
                     continue;
                 case 980:
-                    wArray[r][s - 1] = c;
+                	markCellComplete(r, s-1);
                     GOTO(990);
                     continue;
                 case 990:
-                    c++;
-                    GOTO(1000);
-                    continue;
-                case 1000:
+                    currentCellCount++;
                     vArray[r][s - 1] = 1;
                     s--;
-                    if (c == h * v + 1)
+                    if (currentCellCount == horizontal * vertical + 1)
                         GOTO(1200);
                     else
                         GOTO(1010);
@@ -517,11 +479,8 @@ public class Amazing {
                     GOTO(270);
                     continue;
                 case 1020:
-                    wArray[r + 1][s] = c;
-                    GOTO(1030);
-                    continue;
-                case 1030:
-                    c++;
+                	markCellComplete(r+1, s);
+                    currentCellCount++;
                     if (vArray[r][s] == 0)
                         GOTO(1050);
                     else
@@ -537,10 +496,7 @@ public class Amazing {
                     continue;
                 case 1060:
                     r++;
-                    GOTO(1070);
-                    continue;
-                case 1070:
-                    if (c == h * v + 1)
+                    if (currentCellCount == horizontal * vertical + 1)
                         GOTO(1200);
                     else
                         GOTO(600);
@@ -552,8 +508,8 @@ public class Amazing {
                         GOTO(1100);
                     continue;
                 case 1100:
-                    wArray[r][s + 1] = c;
-                    c++;
+                	markCellComplete(r, s+1);
+                    currentCellCount++;
                     if (vArray[r][s] == 0)
                         GOTO(1120);
                     else
@@ -569,16 +525,13 @@ public class Amazing {
                     continue;
                 case 1130:
                     s++;
-                    if (c == v * h + 1)
+                    if (currentCellCount == vertical * horizontal + 1)
                         GOTO(1200);
                     else
                         GOTO(270);
                     continue;
                 case 1150:
                     z = 1;
-                    GOTO(1160);
-                    continue;
-                case 1160:
                     if (vArray[r][s] == 0)
                         GOTO(1180);
                     else
@@ -604,10 +557,10 @@ public class Amazing {
         }
 
         // 1200:
-        for (int j = 1; j <= v; j++) {
+        for (int j = 1; j <= vertical; j++) {
             print("I");        // 1210
 
-            for (int i = 1; i <= h; i++) {
+            for (int i = 1; i <= horizontal; i++) {
                 if (vArray[i][j] >= 2)
                     print("   ");  // 1240
                 else
@@ -617,7 +570,7 @@ public class Amazing {
             print(" ");   // 1280
             println();
 
-            for (int i = 1; i <= h; i++) {
+            for (int i = 1; i <= horizontal; i++) {
                 if (vArray[i][j] == 0)
                     print(":--");   // 1300, 1340
                 else if (vArray[i][j] == 2)
@@ -629,5 +582,25 @@ public class Amazing {
             print(":");    // 1360
             println();
         }
+    }
+    
+    private static void createEnterance(int x) {
+    	// 130:170
+        for (int i = 1; i <= horizontal; i++) {
+            if (i == x)
+                print(":  ");
+            else
+                print(":--");
+        }
+        // 180
+        print(":");
+        println();
+    }
+    private static void markCellComplete(int x, int y) {
+    	isCellComplete[x][y] = true;
+    }
+    
+    private static boolean isCellComplete(int x, int y) {
+    	return isCellComplete[x][y];
     }
 }
