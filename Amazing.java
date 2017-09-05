@@ -16,6 +16,8 @@ public class Amazing {
     public static int vertical;
     public static boolean [][] isCellComplete;
     public static int [][] maze;
+    private static int q = 0;
+    private static int x;
 
     public static void main(String[] args) {
     	horizontal = Integer.parseInt(args[0]);
@@ -54,9 +56,9 @@ public class Amazing {
 
         if (horizontal == 1 || vertical == 1) return;
 
-        int q = 0;
+        
         int z = 0;
-        int x = rnd(horizontal);
+        x = rnd(horizontal);
 
         createEnterance(x);
 
@@ -73,114 +75,118 @@ public class Amazing {
        loop: while (true) {
             switch (target) {
                 case 210:
-                    if (canMoveDown(row))
-                        GOTO(250);
-                    else
-                        GOTO(220);
-                    continue;
-                case 220:
-                    if (canMoveRight(column))
-                        GOTO(240);
-                    else
-                        GOTO(230);
-                    continue;
-                case 230:
-                    row = 1;
-                    column = 1;
-                    GOTO(260);
-                    continue;
-                case 240:
-                    row = 1;
-                    column++;
-                    GOTO(260);
-                    continue;
-                case 250:
-                    row++;
-                    GOTO(260);
-                    continue;
-                case 260:
-                    if (!isCellComplete(row, column))
-                        GOTO(210);
-                    else
+                    if (canMoveDown(row)) {
+                    	row++;
+                    } else {
+                    	 if (canMoveRight(column)) {
+                    		 row = 1;
+                             column++;
+                         } else {
+                         	row = 1;
+                         	column = 1;
+                         }
+                    }
+                    if (isCellComplete(row, column))
                         GOTO(270);
+                    else
+                        GOTO(210);
                     continue;
                 case 270:
                     if (canMoveUp(row)) // can go up
 	                    if (isCellComplete(row-1, column)) //yes
 	                        GOTO(600);
 	                    else
-	                        GOTO(290);
+	                    	if (canMoveLeft(column))
+	                    		 if (isCellComplete(row, column-1))
+	                                 GOTO(430);
+	                             else
+	                            	 if (isLastRow(row)) {
+	                            		 if (canMoveRight(column)) {
+	                                         if (isCellComplete(row, column+1))
+	                                             GOTO(410);
+	                                         else {
+	                                        	 x = rnd(3);
+	                                             if (x == 1)
+	                                                 GOTO(940);
+	                                             else if (x == 2)
+	                                                 GOTO(980);
+	                                             else if (x == 3)
+	                                                 GOTO(1090);
+	                                             else
+	                                                 GOTO(410);
+	                                         }
+	                            		 }
+	                                     else {
+	                                    	 if (z == 1)
+	                                             GOTO(410);
+	                                         else {
+	                                        	 method390();
+	                                         }
+	                                     }
+	                            	 }
+	                                 else
+	                                	 if (isCellComplete(row+1, column)) {
+	                                		 if (canMoveRight(column)) {
+	                                             if (isCellComplete(row, column+1))
+	                                                 GOTO(410);
+	                                             else {
+	                                            	 x = rnd(3);
+	                                                 if (x == 1)
+	                                                     GOTO(940);
+	                                                 else if (x == 2)
+	                                                     GOTO(980);
+	                                                 else if (x == 3)
+	                                                     GOTO(1090);
+	                                                 else
+	                                                     GOTO(410);
+	                                             }
+	                                		 }
+	                                         else {
+	                                        	 if (z == 1)
+	                                                 GOTO(410);
+	                                             else {
+	                                            	 method390();
+	                                             }
+	                                         }
+	                                	 }
+	                                     else {
+	                                    	  x = rnd(3);
+	                                          if (x == 1)
+	                                              GOTO(940);
+	                                          else if (x == 2)
+	                                              GOTO(980);
+	                                          else if (x == 3)
+	                                              GOTO(1020);
+	                                          else {
+	                                        	  if (canMoveRight(column)) {
+	                                                  if (isCellComplete(row, column+1))
+	                                                      GOTO(410);
+	                                                  else {
+	                                                	  x = rnd(3);
+	                                                      if (x == 1)
+	                                                          GOTO(940);
+	                                                      else if (x == 2)
+	                                                          GOTO(980);
+	                                                      else if (x == 3)
+	                                                          GOTO(1090);
+	                                                      else
+	                                                          GOTO(410);
+	                                                  }
+	                                        	  }
+	                                              else {
+	                                            	  if (z == 1)
+	                                                      GOTO(410);
+	                                                  else {
+	                                                	  method390();
+	                                                  }
+	                                              }
+	                                          }
+	                                     }
+	                        else
+	                            GOTO(430);
                     else {
                     	GOTO(600); // no
                     }
-                    continue;
-                case 290:
-                    if (canMoveLeft(column))
-                        GOTO(300);
-                    else
-                        GOTO(430);
-                    continue;
-                case 300:
-                    if (isCellComplete(row, column-1))
-                        GOTO(430);
-                    else
-                        GOTO(310);
-                    continue;
-                case 310:
-                    if (isLastRow(row))
-                        GOTO(350);
-                    else
-                        GOTO(320);
-                    continue;
-                case 320:
-                    if (isCellComplete(row+1, column))
-                        GOTO(350);
-                    else
-                        GOTO(330);
-                    continue;
-                case 330:
-                    x = rnd(3);
-                    if (x == 1)
-                        GOTO(940);
-                    else if (x == 2)
-                        GOTO(980);
-                    else if (x == 3)
-                        GOTO(1020);
-                    else
-                        GOTO(350);
-                    continue;
-                case 350:
-                    if (canMoveRight(column))
-                        GOTO(380);
-                    else
-                        GOTO(360);
-                    continue;
-                case 360:
-                    if (z == 1)
-                        GOTO(410);
-                    else
-                        GOTO(370);
-                    continue;
-                case 370:
-                    q = 1;
-                    GOTO(390);
-                    continue;
-                case 380:
-                    if (isCellComplete(row, column+1))
-                        GOTO(410);
-                    else
-                        GOTO(390);
-                    continue;
-                case 390:
-                    x = rnd(3);
-                    if (x == 1)
-                        GOTO(940);
-                    else if (x == 2)
-                        GOTO(980);
-                    else if (x == 3)
-                        GOTO(1090);
-                    else
-                        GOTO(410);
                     continue;
                 case 410:
                     x = rnd(2);
@@ -544,12 +550,29 @@ public class Amazing {
                     q = 0;
                     row = 1;
                     column = 1;
-                    GOTO(260);
+                    if (!isCellComplete(row, column))
+                        GOTO(210);
+                    else
+                        GOTO(270);
                     continue;
             }
         }
         mazeToString();
     }
+    
+    // i'll break this out then I';; figure out what it does
+	private static void method390() {
+		q = 1;
+		 x = rnd(3);
+		 if (x == 1)
+		     GOTO(940);
+		 else if (x == 2)
+		     GOTO(980);
+		 else if (x == 3)
+		     GOTO(1090);
+		 else
+		     GOTO(410);
+	}
 
 	private static boolean canMoveRight(int column) {
 		return column != vertical;
