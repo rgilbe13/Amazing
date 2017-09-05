@@ -79,7 +79,7 @@ public class Amazing {
                         GOTO(220);
                     continue;
                 case 220:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(240);
                     else
                         GOTO(230);
@@ -105,20 +105,20 @@ public class Amazing {
                         GOTO(270);
                     continue;
                 case 270:
-                    if (row - 1 == 0) // can go up
-                        GOTO(600); // no
+                    if (canMoveUp(row)) // can go up
+	                    if (isCellComplete(row-1, column)) //yes
+	                        GOTO(600);
+	                    else
+	                        GOTO(290);
                     else {
-                    	if (isCellComplete(row-1, column)) //yes
-                            GOTO(600);
-                        else
-                            GOTO(290);
+                    	GOTO(600); // no
                     }
                     continue;
                 case 290:
-                    if (column - 1 == 0)
-                        GOTO(430);
-                    else
+                    if (canMoveLeft(column))
                         GOTO(300);
+                    else
+                        GOTO(430);
                     continue;
                 case 300:
                     if (isCellComplete(row, column-1))
@@ -127,7 +127,7 @@ public class Amazing {
                         GOTO(310);
                     continue;
                 case 310:
-                    if (row == horizontal)
+                    if (isLastRow(row))
                         GOTO(350);
                     else
                         GOTO(320);
@@ -150,7 +150,7 @@ public class Amazing {
                         GOTO(350);
                     continue;
                 case 350:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(380);
                     else
                         GOTO(360);
@@ -192,7 +192,7 @@ public class Amazing {
                         GOTO(430);
                     continue;
                 case 430:
-                    if (row == horizontal)
+                    if (isLastRow(row))
                         GOTO(530);
                     else
                         GOTO(440);
@@ -204,7 +204,7 @@ public class Amazing {
                         GOTO(450);
                     continue;
                 case 450:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(480);
                     else
                         GOTO(460);
@@ -249,7 +249,7 @@ public class Amazing {
                         GOTO(530);
                     continue;
                 case 530:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(560);
                     else
                         GOTO(540);
@@ -280,10 +280,10 @@ public class Amazing {
                         GOTO(940);
                     continue;
                 case 600:
-                    if (column - 1 == 0)
-                        GOTO(790);
-                    else
+                    if (canMoveLeft(column))
                         GOTO(610);
+                    else
+                        GOTO(790);
                     continue;
                 case 610:
                     if (isCellComplete(row, column-1))
@@ -292,7 +292,7 @@ public class Amazing {
                         GOTO(620);
                     continue;
                 case 620:
-                    if (row == horizontal)
+                    if (isLastRow(row))
                         GOTO(720);
                     else
                         GOTO(630);
@@ -304,7 +304,7 @@ public class Amazing {
                         GOTO(640);
                     continue;
                 case 640:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(670);
                     else
                         GOTO(650);
@@ -346,7 +346,7 @@ public class Amazing {
                         GOTO(720);
                     continue;
                 case 720:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(750);
                     else
                         GOTO(730);
@@ -377,7 +377,7 @@ public class Amazing {
                         GOTO(980);
                     continue;
                 case 790:
-                    if (row == horizontal)
+                    if (isLastRow(row))
                         GOTO(880);
                     else
                         GOTO(800);
@@ -389,7 +389,7 @@ public class Amazing {
                         GOTO(810);
                     continue;
                 case 810:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(840);
                     else
                         GOTO(820);
@@ -423,7 +423,7 @@ public class Amazing {
                         GOTO(1020);
                     continue;
                 case 880:
-                    if (column != vertical)
+                    if (canMoveRight(column))
                         GOTO(910);
                     else
                         GOTO(890);
@@ -550,6 +550,22 @@ public class Amazing {
         }
         mazeToString();
     }
+
+	private static boolean canMoveRight(int column) {
+		return column != vertical;
+	}
+
+	private static boolean isLastRow(int row) {
+		return row == horizontal;
+	}
+
+	private static boolean canMoveLeft(int column) {
+		return column - 1 != 0;
+	}
+
+	private static boolean canMoveUp(int row) {
+		return row - 1 != 0;
+	}
 
 	private static boolean canMoveDown(int row) {
 		return row != horizontal;
